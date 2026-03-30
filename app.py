@@ -20,6 +20,8 @@ def admin_dashboard():
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM products")
     products = cursor.fetchall()
+    # Debug line: This will show you exactly what keys are in your dictionary
+    print(f"DEBUG: First product keys: {products[0].keys() if products else 'No products found'}")
     cursor.close()
     conn.close()
     return render_template('admin.html', products=products)
