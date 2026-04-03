@@ -265,8 +265,15 @@
                     <a href="visual/template/seller.html" class="btn btn-outline-success rounded-pill px-4 w-100 w-lg-auto">
                         <i class="bi bi-shop me-2"></i>Partner with us
                     </a>
-                    <a href="visual/template/login.html" class="btn btn-nature rounded-pill px-4 shadow-sm w-100 w-lg-auto" id="login-btn">
+                    <a href="visual/template/login.html" class="btn btn-nature rounded-pill px-4 shadow-sm w-100 w-lg-auto d-none" id="login-nav-btn">
                         <i class="bi bi-person-circle me-2"></i>Login
+                    </a>
+                    <a href="visual/template/account.html" class="btn btn-outline-dark rounded-pill px-4 d-none" id="user-profile-btn">
+                        <img id="user-nav-photo" src="" class="rounded-circle me-2" style="width: 24px; height: 24px; object-fit: cover; display: none;">
+                        <span id="user-nav-name">Profile</span>
+                    </a>
+                    <a href="javascript:void(0)" onclick="handleLogout()" class="btn btn-link text-danger d-none" id="logout-btn">
+                        <i class="bi bi-box-arrow-right"></i>
                     </a>
                     <a href="visual/template/admin_login.html" class="btn btn-dark rounded-pill px-4 shadow-sm w-100 w-lg-auto">
                         <i class="bi bi-shield-lock me-2"></i>Admin
@@ -340,14 +347,21 @@
     </section>
 
     <!-- Login Modal -->
-    <div class="modal fade" id="loginModal" tabindex="-1">
+    <div class="modal fade" id="userLoginModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-nav border-0 shadow-lg">
-                <div class="modal-body p-5">
-                    <h3 class="fw-bold mb-4">Access Account</h3>
-                    <input type="email" class="form-control mb-3 py-3 rounded-pill border-0" placeholder="Email Address">
-                    <input type="password" id="admin-pass-input" class="form-control mb-4 py-3 rounded-pill border-0" placeholder="Password (Use Admin Key)">
-                    <button class="btn btn-primary w-100 py-3 rounded-pill fw-bold" onclick="handleLogin()">Sign In</button>
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 25px; background: var(--bg-color);">
+                <div class="modal-body p-5 text-center">
+                    <div class="mb-4">
+                        <i class="bi bi-lock-fill display-4 color-nature"></i>
+                        <h3 class="fw-bold mt-2">Login Required</h3>
+                        <p class="text-secondary">Please sign in to view product details and shop.</p>
+                    </div>
+                    <form id="modalLoginForm">
+                        <input type="email" id="modalEmail" class="form-control mb-3 py-3 rounded-pill border-0 shadow-sm px-4" placeholder="Email Address" required>
+                        <input type="password" id="modalPass" class="form-control mb-4 py-3 rounded-pill border-0 shadow-sm px-4" placeholder="Password" required>
+                        <button type="submit" class="btn btn-nature w-100 py-3 rounded-pill fw-bold shadow-sm mb-3">Sign In</button>
+                    </form>
+                    <p class="small text-muted mb-0">New here? <a href="visual/template/login.html" class="color-nature fw-bold text-decoration-none">Create an account</a></p>
                 </div>
             </div>
         </div>
@@ -465,26 +479,66 @@
             }
         }
 
-        function handleLogin() {
-            const pass = document.getElementById('admin-pass-input').value;
-            
-            if (pass === 'My_admin@444') {
-                Swal.fire({ 
-                    title: 'Access Granted!', 
-                    text: 'Redirecting to Admin Portal...', 
-                    icon: 'success',
-                    timer: 1500,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = 'visual/template/admin.html';
-                });
+        // --- AUTH LOGIC ---
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('pbssd_user'));
+            const loginNav = document.getElementById('login-nav-btn');
+            const profileNav = document.getElementById('user-profile-btn');
+            const logoutNav = document.getElementById('logout-btn');
+
+            if (user) {
+                loginNav.classList.add('d-none');
+                profileNav.classList.remove('d-none');
+                logoutNav.classList.remove('d-none');
+                document.getElementById('user-nav-name').innerText = user.name;
+                if (user.photo) {
+                    const img = document.getElementById('user-nav-photo');
+                    img.src = user.photo;
+                    img.style.display = 'inline-block';
+                }
             } else {
-                Swal.fire({ title: 'Standard Access', text: 'Browsing as general user.', icon: 'info' });
-                bootstrap.Modal.getInstance(document.getElementById('loginModal')).hide();
+                loginNav.classList.remove('d-none');
+                profileNav.classList.add('d-none');
+                logoutNav.classList.add('d-none');
             }
         }
 
+        document.getElementById('modalLoginForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('modalEmail').value;
+            const pass = document.getElementById('modalPass').value;
+
+            const request = indexedDB.open('PBSSDFreshAuthDB', 1);
+            request.onsuccess = (event) => {
+                const db = event.target.result;
+                const tx = db.transaction(['users'], 'readonly');
+                const store = tx.objectStore('users');
+                const getReq = store.get(email);
+                
+                getReq.onsuccess = () => {
+                    const user = getReq.result;
+                    if (user && user.password === pass) {
+                        localStorage.setItem('pbssd_user', JSON.stringify({ name: user.name, email: user.email, photo: user.photo }));
+                        bootstrap.Modal.getInstance(document.getElementById('userLoginModal')).hide();
+                        checkAuth();
+                        Swal.fire({ icon: 'success', title: 'Welcome back!', timer: 1500, showConfirmButton: false });
+                    } else {
+                        Swal.fire({ icon: 'error', title: 'Invalid credentials' });
+                    }
+                };
+            };
+        });
+
+        function handleLogout() {
+            localStorage.removeItem('pbssd_user');
+            window.location.reload();
+        }
+
         function addToCart() {
+            if (!localStorage.getItem('pbssd_user')) {
+                new bootstrap.Modal(document.getElementById('userLoginModal')).show();
+                return;
+            }
             Swal.fire({
                 title: 'Added!', toast: true, position: 'top-end', 
                 showConfirmButton: false, timer: 1500, icon: 'success',
@@ -493,6 +547,11 @@
         }
 
         function quickView(id) {
+            if (!localStorage.getItem('pbssd_user')) {
+                new bootstrap.Modal(document.getElementById('userLoginModal')).show();
+                return;
+            }
+            
             const p = products.find(x => x.id === id);
             Swal.fire({
                 title: p.name,
@@ -519,6 +578,7 @@
                 easing: 'ease-out-cubic'
             });
             renderProducts();
+            checkAuth();
         });
 
         // Sticky Navbar Effect
