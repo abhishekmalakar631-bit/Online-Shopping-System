@@ -25,12 +25,14 @@ const productPool = [
 ];
 
 const products = [];
-for (let i = 0; i < 60; i++) {
+const PRODUCTS_PER_CATEGORY = 20;
+const TOTAL_PRODUCTS = categories.length * PRODUCTS_PER_CATEGORY;
+for (let i = 0; i < TOTAL_PRODUCTS; i++) {
     const template = productPool[i % productPool.length];
     products.push({
         id: i,
         name: `${template.name} v${i}`,
-        section: categories[i % 6],
+        section: categories[i % categories.length],
         price: template.price,
         rating: Math.floor(Math.random() * 2) + 4,
         description: 'This is a premium product curated with high quality materials. It comes with a 1-year manufacturer warranty and a 30-day return policy.',
@@ -46,6 +48,18 @@ for (let i = 0; i < 60; i++) {
 }
 
 let toastTimeout;
+let pdCartDB;
+
+const pdCartRequest = indexedDB.open('PBSSDCartDB', 1);
+pdCartRequest.onupgradeneeded = (e) => {
+    const db = e.target.result;
+    if (!db.objectStoreNames.contains('cart_state')) {
+        db.createObjectStore('cart_state');
+    }
+};
+pdCartRequest.onsuccess = (e) => {
+    pdCartDB = e.target.result;
+};
 
         function showToast() {
             const cartToast = document.getElementById('cart-toast');
@@ -75,6 +89,7 @@ let toastTimeout;
             const product = products.find(p => p.id === productId);
 
             const container = document.getElementById('product-content');
+            if (!container) return;
 
             if (product) {
                 
@@ -209,7 +224,30 @@ let toastTimeout;
                 const addToCartBtn = document.querySelector('.btn-add-cart');
                 if (addToCartBtn) {
                     addToCartBtn.addEventListener('click', (event) => {
-                        event.preventDefault(); 
+                        event.preventDefault();
+                        const quantitySelect = document.getElementById('quantity');
+                        const selectedQty = parseInt(quantitySelect?.value || '1', 10);
+                        const quantity = Number.isNaN(selectedQty) ? 1 : selectedQty;
+
+                        if (!localStorage.getItem('pbssd_user')) {
+                            window.location.href = 'visual/template/login.html';
+                            return;
+                        }
+
+                        let cart = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
+                        const existingItem = cart.find(item => item.id === product.id);
+                        if (existingItem) {
+                            existingItem.quantity += quantity;
+                        } else {
+                            cart.push({ ...product, quantity });
+                        }
+                        localStorage.setItem('pbssd_cart', JSON.stringify(cart));
+
+                        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+                        if (pdCartDB) {
+                            const tx = pdCartDB.transaction(['cart_state'], 'readwrite');
+                            tx.objectStore('cart_state').put(count, 'count');
+                        }
                         showToast();
                     });
                 }
