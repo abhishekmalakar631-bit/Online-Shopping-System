@@ -1,29 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    let cartItems = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
     
-    let cartItems = [
-        {
-            id: 1,
-            name: "Choco Chip Cookies",
-            price: 299.00,
-            quantity: 1,
-            image: "../assets/Choco Chip Cookies.jpg"
-        },
-        {
-            id: 2,
-            name: "Hazelnut Praline",
-            price: 150.00,
-            quantity: 1,
-            image: "../assets/Hazelnut Praline.jpg"
-        },
-        {
-            id: 3,
-            name: "Fresh Strawberries",
-            price: 60.00,
-            quantity: 1,
-            image: "../assets/Fresh Strawberries.jpg"
-        }
-    ];
-
     const cartContainer = document.getElementById('cartItemsContainer');
     const subtotal_amount = document.getElementById('subtotalAmount');
     const tax_amount = document.getElementById('taxAmount');
@@ -54,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="col-lg-8 flex-grow-1 cart-item-details-w">
                         <h5 class="fw-bold mb-1">${item.name}</h5>
-                        <p class="text-secondary mb-2">₹${item.price.toFixed(2)}</p>
+                        <p class="text-secondary mb-2">₹${parsePrice(item.price).toFixed(2)}</p>
                         <div class="cart-item-funcs d-flex align-items-center">
                             <div class="d-flex align-items-center me-4">
                                 <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">
@@ -71,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         </div>
                     </div>
                     <div class="text-end">
-                        <span class="fw-bold fs-5 color-nature">₹${(item.price * item.quantity).toFixed(2)}</span>
+                        <span class="fw-bold fs-5 color-nature">₹${(parsePrice(item.price) * item.quantity).toFixed(2)}</span>
                     </div>
                 </div>
             `;
@@ -81,20 +58,31 @@ document.addEventListener('DOMContentLoaded', () => {
         updateTotals();
     }
 
+    function parsePrice(price) {
+        if (typeof price === 'number') return price;
+        return parseFloat(String(price).replace(/[^\d.-]/g, '')) || 0;
+    }
+
     window.updateQuantity = (index, change) => {
         if (cartItems[index].quantity + change > 0) {
             cartItems[index].quantity += change;
+            syncCart();
             renderCart();
         }
     };
 
     window.removeItem = (index) => {
         cartItems.splice(index, 1);
+        syncCart();
         renderCart();
     };
+    
+    function syncCart() {
+        localStorage.setItem('pbssd_cart', JSON.stringify(cartItems));
+    }
 
     function updateTotals() {
-        const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const subtotal = cartItems.reduce((sum, item) => sum + (parsePrice(item.price) * item.quantity), 0);
         const delivery = subtotal > 0 ? 50 : 0;
         const tax = subtotal * 0.05; 
         const total = subtotal + tax + delivery;
@@ -169,6 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.clearCart = () => {
         cartItems = [];
+        syncCart();
         renderCart();
     };
 });
