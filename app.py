@@ -58,5 +58,9 @@ def add_product():
     
     return render_template('add_product.html')
 
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5001)
