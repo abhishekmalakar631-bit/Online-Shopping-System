@@ -51,7 +51,7 @@ Password VARCHAR(100));
 
 --by soumalyo:-
 create Table IF NOT EXISTS product_datails{
-    product_id int AUTO_INCREMENT unique Primary key,
+    product_id int AUTO_INCREMENT  Primary key,
     category_id int unique not null,
     product_name varchar(20) not null,
     description text not null,
@@ -61,3 +61,51 @@ create Table IF NOT EXISTS product_datails{
     created_at timestamp not null
 };
 
+CREATE TABLE IF NOT EXISTS category_details{
+    category_id int AUTO_INCREMENT Primary key,
+    category_name varchar(20) not null,
+    icon text not null,
+    slug varchar(30) not null,
+};
+
+CREATE TABLE IF NOT EXISTS seller_details{
+    seller_id int AUTO_INCREMENT Primary key,
+    user_id int unique not null,
+    shop_name varchar(30) not null,
+    contact varchar(50) not null,
+    status enum('active', 'inactive') default 'active',
+    joined_at timestamp not null
+}
+
+CREATE TABLE IF NOT EXISTS CART_ITEMS{
+    CART_ITEM_ID int AUTO_INCREMENT Primary key,
+    USER_ID int UNIQUE not null,
+    PRODUCT_ID int not null,
+    QUANTITY int not null,
+    ADDED_AT timestamp not null
+}
+
+CREATE TABLE IF NOT EXISTS ORDER_DETAILS{
+    ORDER_ID INT AUTO_INCREMENT Primary key,
+    USER_ID INT NOT NULL,
+    status enum('active', 'inactive') default 'active',
+    TOTAL_AMOUNT DECIMAL(10, 2) NOT NULL,
+    PAYMENT_METHOD enum('credit_card', 'debit_card', 'paypal', 'cash_on_delivery') NOT NULL,
+    PLACED_AT TIMEESTAMP NOT NULL
+};
+
+CREATE TABLE IF NOT EXISTS FAVOURITE_PRODUCTS{
+    FAVOURITE_ID int AUTO_INCREMENT Primary key,
+    USER_ID int UNIQUE not null,
+    PRODUCT_ID int not null,
+    SAVED_AT timestamp not null
+}
+
+CREATE TABLE IF NOT EXISTS ORDER_ITEMS{
+    ORDER_ITEM_ID INT AUTO_INCREMENT PRIMARY KEY,
+    ORDER_ID INT NOT NULL,
+    PRODUCT_ID NOT NULL,
+    QUANTITY INT NOT NULL,
+    UNIT_PRICE DECIMAL(10, 2) NOT NULL,
+    SUBTOTAL DECIMAL(10, 2) NOT NULL,
+}
