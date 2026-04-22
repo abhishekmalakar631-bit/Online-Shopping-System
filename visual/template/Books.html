@@ -151,6 +151,7 @@
         </div>
     </nav>
 
+
     <div class="category-nav-bar" id="categoryNavBar">
         <div class="category-nav-overflow-wrap" id="catOverflowWrap">
             <div class="category-nav-scroll" id="category-filters">
@@ -243,37 +244,6 @@
         </div>
     </section>
 
-    <!-- Feature Trust Bar -->
-    <div class="feature-banner">
-        <div class="feature-item">
-            <div class="feature-icon"><i class="fas fa-truck-fast"></i></div>
-            <div>
-                <h4>Free Shipping</h4>
-                <p>On orders above $25</p>
-            </div>
-        </div>
-        <div class="feature-item">
-            <div class="feature-icon"><i class="fas fa-book-open"></i></div>
-            <div>
-                <h4>100K+ Titles</h4>
-                <p>Every genre covered</p>
-            </div>
-        </div>
-        <div class="feature-item">
-            <div class="feature-icon"><i class="fas fa-rotate-left"></i></div>
-            <div>
-                <h4>Easy Returns</h4>
-                <p>30-day hassle-free</p>
-            </div>
-        </div>
-        <div class="feature-item">
-            <div class="feature-icon"><i class="fas fa-award"></i></div>
-            <div>
-                <h4>Curated Picks</h4>
-                <p>Editor-recommended reads</p>
-            </div>
-        </div>
-    </div>
 
     <!-- Reading List Quick Strip -->
     <div class="reading-strip">
@@ -299,22 +269,33 @@
         <div class="reading-strip-divider"></div>
         <div class="reading-strip-item">
             <i class="fas fa-percent"></i>
-            <span>Under $10</span>
+            <span>Under ₹800</span>
         </div>
     </div>
 
     <!-- Genre Quick Navigation Tabs -->
-    <div class="genre-tabs">
-        <button class="genre-tab active" data-genre="horror"><i class="fas fa-ghost"></i> Horror</button>
-        <button class="genre-tab" data-genre="autobiography"><i class="fas fa-user-pen"></i> Autobiography</button>
-        <button class="genre-tab" data-genre="drama"><i class="fas fa-masks-theater"></i> Drama</button>
-        <button class="genre-tab" data-genre="scifi"><i class="fas fa-rocket"></i> Sci-Fi & Fantasy</button>
-        <button class="genre-tab" data-genre="romance"><i class="fas fa-heart"></i> Romance</button>
-        <button class="genre-tab" data-genre="mystery"><i class="fas fa-magnifying-glass"></i> Mystery</button>
-        <button class="genre-tab" data-genre="selfhelp"><i class="fas fa-lightbulb"></i> Self-Help</button>
-        <button class="genre-tab" data-genre="history"><i class="fas fa-landmark"></i> History</button>
-        <button class="genre-tab" data-genre="children"><i class="fas fa-wand-magic-sparkles"></i> Young Adult</button>
-        <button class="genre-tab" data-genre="poetry"><i class="fas fa-feather-pointed"></i> Poetry</button>
+    <div class="genre-tabs sticky-top">
+        <button class="genre-tab active" onclick="scrollToGenre('hero')">Featured</button>
+        <button class="genre-tab" onclick="scrollToGenre('horror')"><i class="fas fa-ghost"></i> Horror</button>
+        <button class="genre-tab" onclick="scrollToGenre('autobiography')"><i class="fas fa-user-pen"></i>
+            Autobiography</button>
+        <button class="genre-tab" onclick="scrollToGenre('drama')"><i class="fas fa-masks-theater"></i> Drama</button>
+        <button class="genre-tab" onclick="scrollToGenre('sci-fi')"><i class="fas fa-rocket"></i> Sci-Fi</button>
+        <button class="genre-tab" onclick="scrollToGenre('fantasy')"><i class="fas fa-hat-wizard"></i> Fantasy</button>
+        <button class="genre-tab" onclick="scrollToGenre('romance')"><i class="fas fa-heart"></i> Romance</button>
+        <button class="genre-tab" onclick="scrollToGenre('mystery')"><i class="fas fa-magnifying-glass"></i>
+            Mystery</button>
+        <button class="genre-tab" onclick="scrollToGenre('self-help')"><i class="fas fa-lightbulb"></i>
+            Self-Help</button>
+        <button class="genre-tab" onclick="scrollToGenre('history')"><i class="fas fa-landmark"></i> History</button>
+        <button class="genre-tab" onclick="scrollToGenre('young-adult')"><i class="fas fa-child"></i> Young
+            Adult</button>
+        <button class="genre-tab" onclick="scrollToGenre('poetry')"><i class="fas fa-feather-pointed"></i>
+            Poetry</button>
+        <button class="genre-tab" onclick="scrollToGenre('non-fiction')"><i class="fas fa-book-open"></i>
+            Non-Fiction</button>
+        <button class="genre-tab" onclick="scrollToGenre('classic')"><i class="fas fa-scroll"></i> Classics</button>
+        <button class="genre-tab" onclick="scrollToGenre('manga')"><i class="fas fa-palette"></i> Manga</button>
     </div>
 
     <!-- Main Content -->
@@ -331,67 +312,120 @@
             </div>
             <div class="product-scroll-container">
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=The Midnight Library&price=$18.99&img=https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=42000&originalPrice=$28.99&desc=A dazzling novel about all the choices that go into a life well lived.&badge=Bestseller&author=Matt Haig'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=The Midnight Library&price=₹1,519&img=https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=42000&originalPrice=₹2,319&desc=A dazzling novel about all the choices that go into a life well lived.&badge=Bestseller&author=Matt Haig'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="The Midnight Library">
                         <span class="product-badge badge-deal">35% OFF</span>
+                        <button class="like-btn"
+                            onclick="event.stopPropagation(); toggleLike('The Midnight Library', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>The Midnight Library</h3>
-                        <p class="book-author">by Matt Haig</p>
-                        <p class="product-price"><span
-                                style="text-decoration: line-through; font-size: 0.9rem; color: #94a3b8;">$28.99</span>
-                            $18.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.9 <span>(42,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹2,319</span>
+                            <span class="price-current">₹1,519</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('The Midnight Library', '₹1,519', 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('The Midnight Library', '₹1,519', 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Atomic Habits&price=$16.99&img=https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.8&reviews=85000&originalPrice=$27.99&desc=The definitive guide to building good habits.&badge=Top Rated&author=James Clear'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Atomic Habits&price=₹1,359&img=https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.8&reviews=85000&originalPrice=₹2,239&desc=The definitive guide to building good habits.&badge=Top Rated&author=James Clear'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Atomic Habits">
                         <span class="product-badge badge-deal">40% OFF</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('Atomic Habits', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Atomic Habits</h3>
-                        <p class="book-author">by James Clear</p>
-                        <p class="product-price"><span
-                                style="text-decoration: line-through; font-size: 0.9rem; color: #94a3b8;">$27.99</span>
-                            $16.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.8 <span>(85,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹2,239</span>
+                            <span class="price-current">₹1,359</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Atomic Habits', '₹1,359', 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Atomic Habits', '₹1,359', 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Becoming&price=$15.99&img=https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=54000&originalPrice=$32.50&desc=An intimate memoir by the former First Lady.&badge=Award Winner&author=Michelle Obama'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Becoming&price=₹1,279&img=https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=54000&originalPrice=₹2,600&desc=An intimate memoir by the former First Lady.&badge=Award Winner&author=Michelle Obama'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Becoming">
                         <span class="product-badge badge-deal">50% OFF</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('Becoming', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Becoming</h3>
-                        <p class="book-author">by Michelle Obama</p>
-                        <p class="product-price"><span
-                                style="text-decoration: line-through; font-size: 0.9rem; color: #94a3b8;">$32.50</span>
-                            $15.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.9 <span>(54,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹2,600</span>
+                            <span class="price-current">₹1,279</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Becoming', '₹1,279', 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Becoming', '₹1,279', 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Dune&price=$14.99&img=https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=67000&originalPrice=$24.99&desc=The monumental sci-fi epic that started it all.&badge=Legendary&author=Frank Herbert'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Dune&price=₹1,199&img=https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop&cat=Deals&rating=4.9&reviews=67000&originalPrice=₹1,999&desc=The monumental sci-fi epic that started it all.&badge=Legendary&author=Frank Herbert'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Dune">
                         <span class="product-badge badge-deal">40% OFF</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('Dune', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Dune</h3>
-                        <p class="book-author">by Frank Herbert</p>
-                        <p class="product-price"><span
-                                style="text-decoration: line-through; font-size: 0.9rem; color: #94a3b8;">$24.99</span>
-                            $14.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.9 <span>(67,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹1,999</span>
+                            <span class="price-current">₹1,199</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Dune', '₹1,199', 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Dune', '₹1,199', 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -408,67 +442,124 @@
             </div>
             <div class="product-scroll-container">
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Project Hail Mary&price=$22.99&img=https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.9&reviews=56000&badge=Must Read&author=Andy Weir'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Project Hail Mary&price=₹1,839&img=https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.9&reviews=56000&badge=Must Read&author=Andy Weir'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Project Hail Mary">
                         <span class="product-badge badge-best">#1 Seller</span>
                         <span class="rank-badge">#1</span>
+                        <button class="like-btn"
+                            onclick="event.stopPropagation(); toggleLike('Project Hail Mary', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Project Hail Mary</h3>
-                        <p class="book-author">by Andy Weir</p>
-                        <p class="book-rating"><i class="fas fa-star"></i> 4.9</p>
-                        <p class="product-price">$22.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.9 <span>(56,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹2,759</span>
+                            <span class="price-current">₹1,839</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Project Hail Mary', '₹1,839', 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Project Hail Mary', '₹1,839', 'https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=It Ends with Us&price=$15.99&img=https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.6&reviews=120000&badge=Trending&author=Colleen Hoover'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=It Ends with Us&price=₹1,279&img=https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.6&reviews=120000&badge=Trending&author=Colleen Hoover'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="It Ends with Us">
                         <span class="product-badge badge-best">Trending</span>
                         <span class="rank-badge">#2</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('It Ends with Us', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>It Ends with Us</h3>
-                        <p class="book-author">by Colleen Hoover</p>
-                        <p class="book-rating"><i class="fas fa-star"></i> 4.6</p>
-                        <p class="product-price">$15.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.6 <span>(1,20,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹1,919</span>
+                            <span class="price-current">₹1,279</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('It Ends with Us', '₹1,279', 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('It Ends with Us', '₹1,279', 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Sapiens&price=$18.99&img=https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.8&reviews=72000&badge=Essential&author=Yuval Noah Harari'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Sapiens&price=₹1,519&img=https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.8&reviews=72000&badge=Essential&author=Yuval Noah Harari'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Sapiens">
                         <span class="product-badge badge-best">Essential</span>
                         <span class="rank-badge">#3</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('Sapiens', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Sapiens</h3>
-                        <p class="book-author">by Yuval Noah Harari</p>
-                        <p class="book-rating"><i class="fas fa-star"></i> 4.8</p>
-                        <p class="product-price">$18.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.8 <span>(72,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹2,279</span>
+                            <span class="price-current">₹1,519</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Sapiens', '₹1,519', 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Sapiens', '₹1,519', 'https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
                 <div class="product-card"
-                    onclick="window.location.href='Books_ProductDetails.html?name=Normal People&price=$15.99&img=https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.6&reviews=38000&badge=Adapted&author=Sally Rooney'">
+                    onclick="window.location.href='Books_ProductDetails.html?name=Normal People&price=₹1,279&img=https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop&cat=Bestsellers&rating=4.6&reviews=38000&badge=Adapted&author=Sally Rooney'">
                     <div class="image-wrapper">
                         <img src="https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop"
                             class="product-image" alt="Normal People">
                         <span class="product-badge badge-best">Adapted</span>
                         <span class="rank-badge">#4</span>
+                        <button class="like-btn" onclick="event.stopPropagation(); toggleLike('Normal People', this)">
+                            <i class="far fa-heart"></i>
+                        </button>
                     </div>
                     <div class="product-info">
                         <h3>Normal People</h3>
-                        <p class="book-author">by Sally Rooney</p>
-                        <p class="book-rating"><i class="fas fa-star"></i> 4.6</p>
-                        <p class="product-price">$15.99</p>
-                        <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
+                        <div class="rating">
+                            <i class="fas fa-star"></i> 4.6 <span>(38,000)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="price-original">₹1,919</span>
+                            <span class="price-current">₹1,279</span>
+                        </div>
+                        <div class="action-buttons">
+                            <button class="btn-add-cart"
+                                onclick="event.stopPropagation(); addToCart('Normal People', '₹1,279', 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop', this)"><i
+                                    class="fas fa-shopping-cart"></i> Add</button>
+                            <button class="btn-buy-now"
+                                onclick="event.stopPropagation(); buyNow('Normal People', '₹1,279', 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop')"><i
+                                    class="fas fa-bolt"></i> Buy</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -567,6 +658,7 @@
     </footer>
 
     <script src="../js/navbar.js" defer></script>
+    <script src="../js/Books_Data.js" defer></script>
     <script src="../js/Books.js" defer></script>
 </body>
 

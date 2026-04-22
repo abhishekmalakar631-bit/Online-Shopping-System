@@ -107,23 +107,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
+            // Sync current cart to the global payment gateway storage
+            const formattedItems = cartItems.map(item => ({
+                name: item.name,
+                price: parsePrice(item.price),
+                image: item.image
+            }));
             
-            document.getElementById('checkoutProgress').style.width = '33%';
-            document.getElementById('checkoutProgress').classList.remove('bg-success');
-            document.getElementById('step-address').classList.remove('d-none');
-            document.getElementById('step-payment').classList.add('d-none');
-            document.getElementById('step-thankyou').classList.add('d-none');
+            sessionStorage.setItem('um_cart', JSON.stringify(formattedItems));
             
-            
-            const paymentStep = document.getElementById('step-payment');
-            const buttons = paymentStep.querySelectorAll('button');
-            buttons.forEach(btn => btn.disabled = false);
-            buttons[1].innerText = 'Place Order';
-            
-            if (!checkoutModalInstance) {
-                checkoutModalInstance = new bootstrap.Modal(document.getElementById('checkoutModal'));
-            }
-            checkoutModalInstance.show();
+            // Redirect to the existing payment gateway
+            window.location.href = '../../templates/payment_gateway.html';
         });
     }
 

@@ -317,6 +317,8 @@
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .all-product-card:hover {
@@ -328,8 +330,8 @@
 /* Image Container */
 .apc-image-wrap {
     position: relative;
-    height: 240px;
-    background: #faf6ef;
+    height: 240px; /* Reduced by 15% (from 280px) */
+    background: #f8fafc;
     overflow: hidden;
 }
 
@@ -410,6 +412,9 @@
 /* Product Info Section */
 .apc-info {
     padding: 1.2rem 1.4rem 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .apc-category {
@@ -538,6 +543,13 @@
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.25);
 }
 
+.apc-btn-cart.added {
+    background: var(--bk-primary) !important;
+    color: white !important;
+    border-color: var(--bk-primary) !important;
+    cursor: default;
+}
+
 .apc-btn-buy {
     flex: 1;
     padding: clamp(0.5rem, 1.2vw, 0.75rem);
@@ -616,8 +628,8 @@
 
 @media (max-width: 992px) {
     .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-        gap: 1.5rem;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
     }
 
     .filter-top-row {
@@ -632,8 +644,8 @@
 
 @media (max-width: 768px) {
     .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.2rem;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.5rem;
     }
 
     .products-grid-wrapper {
@@ -734,4 +746,21 @@
         bottom: 20px;
         right: 20px;
     }
+}
+
+/* --- Interaction States --- */
+.apc-btn-cart.added, .btn-add-cart.added {
+    background: var(--bk-primary) !important;
+    color: white !important;
+    border-color: var(--bk-primary) !important;
+    cursor: default;
+}
+
+.apc-like-btn.liked, .pd-like-btn.liked, .like-btn.liked {
+    color: #e11d48 !important;
+    background: rgba(225, 29, 72, 0.1) !important;
+}
+
+.apc-like-btn.liked i, .pd-like-btn.liked i, .like-btn.liked i {
+    color: #e11d48 !important;
 }

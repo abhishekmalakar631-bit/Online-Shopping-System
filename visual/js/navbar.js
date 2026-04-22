@@ -163,7 +163,7 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function updateCartBadge() {
-    const cart = JSON.parse(sessionStorage.getItem('um_cart') || '[]');
+    const cart = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
     const badge = document.getElementById('cart-badge');
     const badgeMobile = document.getElementById('cart-badge-mobile');
     if (badge) {

@@ -1,6 +1,6 @@
 // =============================================
 // Books.js — Hero Carousel + Dynamic Genre Sections
-// Theme: Warm Amber & Deep Burgundy (Literary)
+// Theme: Standardized UrbanMart Nature/Green
 // =============================================
 
 // Hero Carousel Dynamic Data
@@ -11,7 +11,7 @@ const heroProducts = [
         tag: "BESTSELLER",
         img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&h=600&fit=crop",
         link: "Books_ProductDetails.html?name=The Midnight Library&price=₹1,519&img=https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&h=600&fit=crop&cat=Fiction&rating=4.9&reviews=42000&originalPrice=₹2,319&desc=A dazzling novel about all the choices that go into a life well lived.&badge=Bestseller",
-        bg: "linear-gradient(rgba(26, 10, 28, 0.85), rgba(74, 25, 66, 0.85)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1600&h=900&fit=crop')",
+        bg: "linear-gradient(rgba(45, 90, 39, 0.85), rgba(27, 48, 34, 0.85)), url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1600&h=900&fit=crop')",
         desc: "Between life and death there is a library. Every book contains a different version of your life. Discover the #1 bestselling phenomenon."
     },
     {
@@ -20,7 +20,7 @@ const heroProducts = [
         tag: "SELF-IMPROVEMENT",
         img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&h=600&fit=crop",
         link: "Books_ProductDetails.html?name=Atomic Habits&price=₹1,359&img=https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&h=600&fit=crop&cat=Self-Help&rating=4.8&reviews=85000&originalPrice=₹2,239&desc=The life-changing million-copy bestseller. Build good habits, break bad ones.&badge=Phenomenon",
-        bg: "linear-gradient(rgba(26, 10, 28, 0.85), rgba(74, 25, 66, 0.85)), url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1600&h=900&fit=crop')",
+        bg: "linear-gradient(rgba(45, 90, 39, 0.85), rgba(27, 48, 34, 0.85)), url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1600&h=900&fit=crop')",
         desc: "Tiny changes, remarkable results. Learn the proven system that millions have used to transform their daily routines forever."
     },
     {
@@ -29,7 +29,7 @@ const heroProducts = [
         tag: "SCI-FI EPIC",
         img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=600&h=600&fit=crop",
         link: "Books_ProductDetails.html?name=Dune&price=₹1,199&img=https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=600&h=600&fit=crop&cat=Sci-Fi&rating=4.9&reviews=67000&originalPrice=₹1,999&desc=The monumental sci-fi saga. A stunning blend of adventure and mysticism.&badge=Legendary",
-        bg: "linear-gradient(rgba(26, 10, 28, 0.85), rgba(74, 25, 66, 0.85)), url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=1600&h=900&fit=crop')",
+        bg: "linear-gradient(rgba(45, 90, 39, 0.85), rgba(27, 48, 34, 0.85)), url('https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=1600&h=900&fit=crop')",
         desc: "The greatest science fiction novel of all time. A masterwork of imagination set on the desert planet Arrakis."
     }
 ];
@@ -45,14 +45,6 @@ let currentHeroSlide = 0;
 let carouselTimer;
 const SLIDE_DURATION = 5000;
 
-// ---- Swipe / Drag State ----
-let isDragging = false;
-let dragStartX = 0;
-let dragCurrentX = 0;
-let dragStartTime = 0;
-const SWIPE_THRESHOLD = 50;
-const VELOCITY_THRESHOLD = 0.3;
-
 // Render Hero Carousel
 function renderHeroCarousel() {
     if (!carouselInner || !carouselDots) return;
@@ -61,8 +53,6 @@ function renderHeroCarousel() {
         const slide = document.createElement('div');
         slide.className = `carousel-slide ${index === 0 ? 'active' : ''}`;
         slide.style.backgroundImage = product.bg;
-        slide.style.backgroundSize = 'cover';
-        slide.style.backgroundPosition = 'center';
 
         slide.innerHTML = `
             <div class="hero-content">
@@ -75,7 +65,7 @@ function renderHeroCarousel() {
                     <div class="hero-card">
                         <img src="${product.img}" alt="${product.name}">
                         <h3>${product.name}</h3>
-                        <p class="hero-price">${product.price}</p>
+                        <p class="hero-price">${formatPrice(product.price)}</p>
                         <button class="btn-light" onclick="window.location.href='${product.link}'">VIEW BOOK</button>
                     </div>
                 </div>
@@ -93,11 +83,9 @@ function renderHeroCarousel() {
     if (prevBtn) prevBtn.onclick = () => { prevHeroSlide(); };
     if (nextBtn) nextBtn.onclick = () => { nextHeroSlide(); };
 
-    initSwipeHandlers();
     startCarouselAutoPlay();
 }
 
-// Show Slide
 function showHeroSlide(index, direction) {
     const slides = document.querySelectorAll('.carousel-slide');
     const dots = document.querySelectorAll('.carousel-dot');
@@ -105,152 +93,228 @@ function showHeroSlide(index, direction) {
     index = ((index % heroProducts.length) + heroProducts.length) % heroProducts.length;
     if (index === currentHeroSlide) return;
 
-    slides.forEach(s => {
-        s.classList.remove('next-slide', 'prev-slide', 'active');
-        s.style.transform = '';
-        s.style.opacity = '';
-    });
+    slides.forEach(s => s.classList.remove('active', 'next-slide', 'prev-slide'));
     dots.forEach(d => d.classList.remove('active'));
 
-    currentHeroSlide = index;
-    const activeSlide = slides[currentHeroSlide];
+    const activeSlide = slides[index];
     activeSlide.classList.add('active');
     activeSlide.classList.add(direction === 'next' ? 'next-slide' : 'prev-slide');
-    dots[currentHeroSlide].classList.add('active');
+    dots[index].classList.add('active');
+    currentHeroSlide = index;
 
     startCarouselAutoPlay();
 }
 
-function nextHeroSlide() {
-    let next = (currentHeroSlide + 1) % heroProducts.length;
-    showHeroSlide(next, 'next');
-}
+function nextHeroSlide() { showHeroSlide(currentHeroSlide + 1, 'next'); }
+function prevHeroSlide() { showHeroSlide(currentHeroSlide - 1, 'prev'); }
 
-function prevHeroSlide() {
-    let prev = (currentHeroSlide - 1 + heroProducts.length) % heroProducts.length;
-    showHeroSlide(prev, 'prev');
-}
-
-// Auto-Play with Progress Bar
 function startCarouselAutoPlay() {
     clearInterval(carouselTimer);
-
     if (progressFill) {
         progressFill.style.transition = 'none';
         progressFill.style.width = '0%';
-        progressFill.offsetHeight; // force reflow
+        progressFill.offsetHeight;
         progressFill.style.transition = `width ${SLIDE_DURATION}ms linear`;
         progressFill.style.width = '100%';
     }
-
     carouselTimer = setInterval(nextHeroSlide, SLIDE_DURATION);
 }
 
-function pauseCarouselAutoPlay() {
-    clearInterval(carouselTimer);
-    if (progressFill) {
-        progressFill.style.transition = 'none';
-        progressFill.style.width = progressFill.offsetWidth + 'px';
+// Master database loaded from Books_Data.js
+// Building genreData dynamically from allProducts
+const genreData = {
+    horror: {
+        tagline: "SPINE-CHILLING READS",
+        title: "Horror",
+        products: allProducts.filter(p => p.category === "Horror").slice(0, 4)
+    },
+    autobiography: {
+        tagline: "REAL STORIES, REAL LIVES",
+        title: "Autobiography",
+        products: allProducts.filter(p => p.category === "Autobiography").slice(0, 4)
+    },
+    drama: {
+        tagline: "STORIES THAT MOVE YOU",
+        title: "Drama",
+        products: allProducts.filter(p => p.category === "Drama").slice(0, 5)
+    },
+    scifi: {
+        tagline: "BEYOND IMAGINATION",
+        title: "Sci-Fi",
+        id: "sci-fi",
+        products: allProducts.filter(p => p.category === "Sci-Fi").slice(0, 4)
+    },
+    fantasy: {
+        tagline: "WORLDS OF WONDER",
+        title: "Fantasy",
+        id: "fantasy",
+        products: allProducts.filter(p => p.category === "Fantasy").slice(0, 4)
+    },
+    romance: {
+        tagline: "LOVE IN EVERY PAGE",
+        title: "Romance",
+        products: allProducts.filter(p => p.category === "Romance").slice(0, 4)
+    },
+    mystery: {
+        tagline: "UNRAVEL THE TRUTH",
+        title: "Mystery",
+        products: allProducts.filter(p => p.category === "Mystery").slice(0, 4)
+    },
+    selfhelp: {
+        tagline: "TRANSFORM YOUR LIFE",
+        title: "Self-Help",
+        products: allProducts.filter(p => p.category === "Self-Help").slice(0, 4)
+    },
+    history: {
+        tagline: "LESSONS FROM THE PAST",
+        title: "History",
+        products: allProducts.filter(p => p.category === "History").slice(0, 4)
+    },
+    youngadult: {
+        tagline: "YOUTH & ADVENTURE",
+        title: "Young Adult",
+        id: "young-adult",
+        products: allProducts.filter(p => p.category === "Young Adult").slice(0, 4)
+    },
+    poetry: {
+        tagline: "ART IN VERSE",
+        title: "Poetry",
+        products: allProducts.filter(p => p.category === "Poetry").slice(0, 4)
+    },
+    nonfiction: {
+        tagline: "KNOWLEDGE & TRUTH",
+        title: "Non-Fiction",
+        id: "non-fiction",
+        products: allProducts.filter(p => p.category === "Non-Fiction").slice(0, 4)
+    },
+    classic: {
+        tagline: "TIMELESS MASTERPIECES",
+        title: "Classics",
+        id: "classic",
+        products: allProducts.filter(p => p.category === "Classic").slice(0, 4)
+    },
+    manga: {
+        tagline: "VISUAL STORYTELLING",
+        title: "Manga",
+        products: allProducts.filter(p => p.category === "Manga").slice(0, 4)
     }
-}
+};
 
-// =============================================
-// Touch + Mouse Swipe / Drag Handlers
-// =============================================
-function initSwipeHandlers() {
-    const carousel = document.querySelector('.hero-carousel');
-    if (!carousel) return;
+// Map display names to the key for cleaner look
+Object.keys(genreData).forEach(key => {
+    // Ensure img property is present for the card renderer
+    genreData[key].products = genreData[key].products.map(p => ({
+        ...p,
+        img: p.img || "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop"
+    }));
+});
 
-    carousel.addEventListener('dragstart', e => e.preventDefault());
-
-    carousel.addEventListener('touchstart', onDragStart, { passive: true });
-    carousel.addEventListener('touchmove', onDragMove, { passive: false });
-    carousel.addEventListener('touchend', onDragEnd);
-    carousel.addEventListener('touchcancel', onDragEnd);
-
-    carousel.addEventListener('mousedown', onDragStart);
-    carousel.addEventListener('mousemove', onDragMove);
-    carousel.addEventListener('mouseup', onDragEnd);
-    carousel.addEventListener('mouseleave', onDragEnd);
-}
-
-function getClientX(e) {
-    return e.touches ? e.touches[0].clientX : e.clientX;
-}
-
-function onDragStart(e) {
-    if (e.target.closest('.carousel-control, .carousel-dot, .btn-light, .add-to-cart')) return;
-
-    isDragging = true;
-    dragStartX = getClientX(e);
-    dragCurrentX = dragStartX;
-    dragStartTime = Date.now();
-
-    pauseCarouselAutoPlay();
-    document.querySelector('.hero-carousel').style.cursor = 'grabbing';
-
-    const activeSlide = document.querySelectorAll('.carousel-slide')[currentHeroSlide];
-    if (activeSlide) activeSlide.style.transition = 'none';
-}
-
-function onDragMove(e) {
-    if (!isDragging) return;
-    if (e.cancelable && e.touches) e.preventDefault();
-
-    dragCurrentX = getClientX(e);
-    const deltaX = dragCurrentX - dragStartX;
-
-    const activeSlide = document.querySelectorAll('.carousel-slide')[currentHeroSlide];
-    if (activeSlide) {
-        const dampedDelta = deltaX * 0.4;
-        activeSlide.style.transform = `translateX(${dampedDelta}px)`;
-        activeSlide.style.opacity = `${1 - Math.abs(deltaX) / 1500}`;
+function scrollToGenre(genreId) {
+    if (genreId === 'hero') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
     }
+    const target = document.getElementById(`genre-${genreId}`);
+    if (target) {
+        const offset = target.offsetTop - 120; // Adjusted for sticky nav
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+    }
+    
+    // Update active state in nav
+    document.querySelectorAll('.genre-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.getAttribute('onclick').includes(`'${genreId}'`));
+    });
 }
 
-function onDragEnd(e) {
-    if (!isDragging) return;
-    isDragging = false;
+// Sync genre tabs with the dynamic category-nav-bar position
+window.addEventListener('scroll', () => {
+    const genreTabs = document.querySelector('.genre-tabs');
+    const catBar = document.getElementById('categoryNavBar');
+    if (!genreTabs || !catBar) return;
+    
+    // Get current top of cat bar (which is updated by navbar.js)
+    const catBarTop = parseInt(window.getComputedStyle(catBar).top);
+    const catBarHeight = catBar.getBoundingClientRect().height;
+    
+    // Set genre tabs to be directly below it
+    genreTabs.style.top = `${catBarTop + catBarHeight}px`;
+});
 
-    document.querySelector('.hero-carousel').style.cursor = '';
 
-    const deltaX = dragCurrentX - dragStartX;
-    const elapsed = Date.now() - dragStartTime;
-    const velocity = Math.abs(deltaX) / elapsed;
+const badgesPool = [
+    { text: "Bestseller", class: "badge-best" },
+    { text: "Trending", class: "badge-deal" },
+    { text: "New", class: "badge-new" }
+];
 
-    const activeSlide = document.querySelectorAll('.carousel-slide')[currentHeroSlide];
-    if (activeSlide) {
-        activeSlide.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-        activeSlide.style.transform = '';
-        activeSlide.style.opacity = '';
-    }
+function renderDynamicGenres() {
+    const container = document.getElementById('dynamic-categories');
+    if (!container) return;
 
-    if (Math.abs(deltaX) > SWIPE_THRESHOLD || velocity > VELOCITY_THRESHOLD) {
-        if (deltaX < 0) {
-            nextHeroSlide();
-        } else {
-            prevHeroSlide();
-        }
-    } else {
-        startCarouselAutoPlay();
-    }
+    Object.keys(genreData).forEach((key, index) => {
+        const genre = genreData[key];
+        const sectionId = genre.id || key;
+        const section = document.createElement('section');
+        section.className = 'container';
+        section.id = `genre-${sectionId}`;
+        section.style.background = index % 2 === 0 ? 'var(--book-warm-bg)' : 'var(--book-section-alt)';
+
+        section.innerHTML = `
+            <div class="section-header">
+                <div>
+                    <span class="section-tagline">${genre.tagline}</span>
+                    <h2>${genre.title}</h2>
+                </div>
+                <a href="Books_AllProducts.html?cat=${encodeURIComponent(genre.title)}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="product-scroll-container">
+                ${genre.products.map(p => {
+                    const b = badgesPool[Math.floor(Math.random() * badgesPool.length)];
+                    return `
+                    <div class="product-card" onclick="window.location.href='Books_ProductDetails.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent(p.price)}&img=${encodeURIComponent(p.img)}&cat=${encodeURIComponent(genre.title)}&badge=${encodeURIComponent(b.text)}'">
+                        <div class="image-wrapper">
+                            <img src="${p.img}" class="product-image" alt="${p.name}">
+                            <span class="product-badge ${b.class}">${b.text}</span>
+                            <button class="like-btn ${isLiked(p.name) ? 'liked' : ''}" onclick="event.stopPropagation(); toggleLike('${p.name.replace(/'/g, "\\'")}', this)">
+                                <i class="${isLiked(p.name) ? 'fas' : 'far'} fa-heart"></i>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <h3>${p.name}</h3>
+                            <p class="author-name" style="font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">by ${p.author}</p>
+                            <div class="rating">
+                                <i class="fas fa-star" style="color:#f1c40f"></i> 4.8 <span>(1.2k)</span>
+                            </div>
+                            <div class="product-price">
+                                <span class="price-current">${formatPrice(p.price)}</span>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="btn-add-cart ${isInCart(p.name) ? 'added' : ''}" onclick="event.stopPropagation(); addToCart('${p.name.replace(/'/g, "\\'")}', '${p.price}', '${p.img}', this)">
+                                    <i class="fas ${isInCart(p.name) ? 'fa-check' : 'fa-shopping-cart'}"></i> ${isInCart(p.name) ? 'Added' : 'Add'}
+                                </button>
+                                <button class="btn-buy-now" onclick="event.stopPropagation(); buyNow('${p.name.replace(/'/g, "\\'")}', '${p.price}', '${p.img}')">
+                                    <i class="fas fa-bolt"></i> Buy
+                                </button>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('')}
+            </div>
+        `;
+        container.appendChild(section);
+    });
 }
 
-// =============================================
-// Featured Authors Data
-// =============================================
+// Authors
 const featuredAuthors = [
     { name: "Stephen King", genre: "Horror / Thriller", bio: "The master of fear. Over 350 million copies sold worldwide.", img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&h=200&fit=crop" },
     { name: "Michelle Obama", genre: "Autobiography", bio: "Former First Lady. Her memoir broke all publishing records.", img: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&h=200&fit=crop" },
-    { name: "Haruki Murakami", genre: "Literary Fiction", bio: "Japan's most celebrated writer of surreal, dreamlike tales.", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&fit=crop" },
-    { name: "J.K. Rowling", genre: "Fantasy", bio: "Creator of the wizarding world loved by billions.", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&h=200&fit=crop" },
-    { name: "Neil Gaiman", genre: "Dark Fantasy", bio: "Weaves mythology into breathtaking modern narratives.", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&h=200&fit=crop" }
+    { name: "Colleen Hoover", genre: "Romance", bio: "Social media phenomenon and queen of contemporary romance.", img: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&h=200&fit=crop" }
 ];
 
 function renderFeaturedAuthors() {
     const grid = document.getElementById('author-spotlight-grid');
     if (!grid) return;
-
     featuredAuthors.forEach(author => {
         const card = document.createElement('div');
         card.className = 'author-card';
@@ -264,208 +328,145 @@ function renderFeaturedAuthors() {
     });
 }
 
-// =============================================
-// Dynamic Genre Sections
-// =============================================
-const genreData = {
-    horror: {
-        tagline: "SPINE-CHILLING READS",
-        title: "Horror & Thrillers",
-        products: [
-            { name: "It", author: "Stephen King", price: "₹1,199", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "The Shining", author: "Stephen King", price: "₹1,119", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" },
-            { name: "Bird Box", author: "Josh Malerman", price: "₹1,039", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "Mexican Gothic", author: "Silvia Moreno-Garcia", price: "₹1,279", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    autobiography: {
-        tagline: "REAL STORIES, REAL LIVES",
-        title: "Autobiography & Memoir",
-        products: [
-            { name: "Becoming", author: "Michelle Obama", price: "₹1,279", img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop" },
-            { name: "Educated", author: "Tara Westover", price: "₹1,199", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop" },
-            { name: "Born a Crime", author: "Trevor Noah", price: "₹1,119", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "Long Walk to Freedom", author: "Nelson Mandela", price: "₹1,359", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    drama: {
-        tagline: "STORIES THAT MOVE YOU",
-        title: "Drama & Literary Fiction",
-        products: [
-            { name: "Normal People", author: "Sally Rooney", price: "₹1,279", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "A Little Life", author: "Hanya Yanagihara", price: "₹1,439", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" },
-            { name: "The Kite Runner", author: "Khaled Hosseini", price: "₹1,199", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" },
-            { name: "Beautiful World", author: "Sally Rooney", price: "₹1,359", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    scifi: {
-        tagline: "BEYOND IMAGINATION",
-        title: "Sci-Fi & Fantasy",
-        products: [
-            { name: "Project Hail Mary", author: "Andy Weir", price: "₹1,839", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" },
-            { name: "Dune", author: "Frank Herbert", price: "₹1,199", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "The Name of the Wind", author: "Patrick Rothfuss", price: "₹1,359", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "Neuromancer", author: "William Gibson", price: "₹1,119", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    romance: {
-        tagline: "LOVE IN EVERY PAGE",
-        title: "Romance",
-        products: [
-            { name: "It Ends with Us", author: "Colleen Hoover", price: "₹1,279", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" },
-            { name: "The Notebook", author: "Nicholas Sparks", price: "₹1,039", img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop" },
-            { name: "Beach Read", author: "Emily Henry", price: "₹1,199", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "People We Meet", author: "Emily Henry", price: "₹1,279", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    mystery: {
-        tagline: "UNRAVEL THE TRUTH",
-        title: "Mystery & Crime",
-        products: [
-            { name: "Gone Girl", author: "Gillian Flynn", price: "₹1,199", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "The Girl on the Train", author: "Paula Hawkins", price: "₹1,119", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" },
-            { name: "Big Little Lies", author: "Liane Moriarty", price: "₹1,199", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" },
-            { name: "The Da Vinci Code", author: "Dan Brown", price: "₹1,039", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    selfhelp: {
-        tagline: "TRANSFORM YOUR LIFE",
-        title: "Self-Help & Growth",
-        products: [
-            { name: "Atomic Habits", author: "James Clear", price: "₹1,359", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop" },
-            { name: "The Power of Now", author: "Eckhart Tolle", price: "₹1,199", img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop" },
-            { name: "Think and Grow Rich", author: "Napoleon Hill", price: "₹959", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "The 7 Habits", author: "Stephen Covey", price: "₹1,279", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    history: {
-        tagline: "LESSONS FROM THE PAST",
-        title: "History & Politics",
-        products: [
-            { name: "Sapiens", author: "Yuval Noah Harari", price: "₹1,519", img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop" },
-            { name: "Guns, Germs, and Steel", author: "Jared Diamond", price: "₹1,359", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" },
-            { name: "The Silk Roads", author: "Peter Frankopan", price: "₹1,439", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "SPQR", author: "Mary Beard", price: "₹1,279", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    children: {
-        tagline: "IMAGINATION UNLIMITED",
-        title: "Young Adult & Children",
-        products: [
-            { name: "Harry Potter Box Set", author: "J.K. Rowling", price: "₹3,999", img: "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=400&h=300&fit=crop" },
-            { name: "Percy Jackson", author: "Rick Riordan", price: "₹1,039", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "The Hunger Games", author: "Suzanne Collins", price: "₹1,199", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" },
-            { name: "Matilda", author: "Roald Dahl", price: "₹799", img: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&h=300&fit=crop" }
-        ]
-    },
-    poetry: {
-        tagline: "WORDS THAT RESONATE",
-        title: "Poetry & Verse",
-        products: [
-            { name: "Milk and Honey", author: "Rupi Kaur", price: "₹879", img: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?q=80&w=400&h=300&fit=crop" },
-            { name: "The Sun and Her Flowers", author: "Rupi Kaur", price: "₹1,039", img: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=400&h=300&fit=crop" },
-            { name: "Leaves of Grass", author: "Walt Whitman", price: "₹719", img: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=400&h=300&fit=crop" },
-            { name: "The Waste Land", author: "T.S. Eliot", price: "₹799", img: "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=400&h=300&fit=crop" }
-        ]
+// Logic Functions
+function toggleLike(pName, btn) {
+    let liked = JSON.parse(localStorage.getItem('books_liked') || '[]');
+    const idx = liked.indexOf(pName);
+    if (idx > -1) {
+        liked.splice(idx, 1);
+        btn.classList.remove('liked');
+        btn.innerHTML = '<i class="far fa-heart"></i>';
+    } else {
+        liked.push(pName);
+        btn.classList.add('liked');
+        btn.innerHTML = '<i class="fas fa-heart"></i>';
     }
-};
-
-const badgesPool = [
-    { text: "Bestseller", class: "badge-best" },
-    { text: "Top Pick", class: "badge-best" },
-    { text: "New", class: "badge-new" },
-    { text: "Trending", class: "badge-deal" }
-];
-
-function renderDynamicGenres() {
-    const container = document.getElementById('dynamic-categories');
-    if (!container) return;
-
-    const genreKeys = Object.keys(genreData);
-
-    genreKeys.forEach((key, index) => {
-        const genre = genreData[key];
-        const section = document.createElement('section');
-        section.className = 'container';
-        section.id = `genre-${key}`;
-        section.style.background = index % 2 === 0 ? 'var(--book-warm-bg)' : 'var(--book-section-alt)';
-
-        section.innerHTML = `
-            <div class="section-header">
-                <div>
-                    <span class="section-tagline">${genre.tagline}</span>
-                    <h2>${genre.title}</h2>
-                </div>
-                <a href="Books_AllProducts.html" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
-            </div>
-            <div class="product-scroll-container">
-                ${genre.products.map(p => {
-                    const b = badgesPool[Math.floor(Math.random() * badgesPool.length)];
-                    return `
-                    <div class="product-card" onclick="window.location.href='Books_ProductDetails.html?name=${encodeURIComponent(p.name)}&price=${encodeURIComponent(p.price)}&img=${encodeURIComponent(p.img)}&cat=${encodeURIComponent(genre.title)}&badge=${encodeURIComponent(b.text)}'">
-                        <div class="image-wrapper">
-                            <img src="${p.img}" class="product-image" alt="${p.name}">
-                            <span class="product-badge ${b.class}">${b.text}</span>
-                        </div>
-                        <div class="product-info">
-                            <h3>${p.name}</h3>
-                            <p class="book-author">by ${p.author}</p>
-                            <p class="product-price">${p.price}</p>
-                            <button class="add-to-cart" onclick="event.stopPropagation();">Add to Cart</button>
-                        </div>
-                    </div>
-                    `;
-                }).join('')}
-            </div>
-        `;
-        container.appendChild(section);
-    });
+    localStorage.setItem('books_liked', JSON.stringify(liked));
 }
 
-// =============================================
-// Genre Tab Click → Scroll to Section
-// =============================================
-function initGenreTabs() {
-    document.querySelectorAll('.genre-tab').forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Update active state
-            document.querySelectorAll('.genre-tab').forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            // Scroll to corresponding section
-            const genreId = tab.dataset.genre;
-            const section = document.getElementById(`genre-${genreId}`);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        });
-    });
+// --- Helper Functions ---
+function formatPrice(p) {
+    if (!p) return '';
+    if (typeof p === 'string' && p.includes('₹')) return p;
+    const num = parseInt(String(p).replace(/[^0-9]/g, '')) || 0;
+    return '₹' + num.toLocaleString('en-IN');
 }
 
-// =============================================
-// Newsletter Form
-// =============================================
-function initNewsletter() {
-    const form = document.getElementById('newsletter-form');
-    if (!form) return;
+function isInCart(pName) {
+    let cart = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
+    return cart.some(item => item.name === pName);
+}
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const input = form.querySelector('input');
-        if (input && input.value) {
-            alert(`Welcome to the Book Lovers Club! 📚\nWe'll send curated picks to ${input.value}`);
-            input.value = '';
+function isLiked(pName) {
+    const liked = JSON.parse(localStorage.getItem('books_liked') || '[]');
+    return liked.includes(pName);
+}
+
+function addToCart(pName, pPrice, pImg, btn) {
+    const numericPrice = parseInt(String(pPrice).replace(/[^0-9]/g, ''));
+    let cart = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
+    
+    const existingIndex = cart.findIndex(item => item.name === pName);
+
+    if (existingIndex > -1) {
+        // Remove from cart
+        cart.splice(existingIndex, 1);
+        localStorage.setItem('pbssd_cart', JSON.stringify(cart));
+        showToast(`${pName} removed from cart!`, false);
+        
+        if (btn) {
+            btn.classList.remove('added');
+            btn.innerHTML = `<i class="fas fa-shopping-cart"></i> Add`;
         }
-    });
+    } else {
+        // Add to cart
+        cart.push({ 
+            name: pName, 
+            price: numericPrice, 
+            image: pImg,
+            quantity: 1 
+        });
+        localStorage.setItem('pbssd_cart', JSON.stringify(cart));
+        showToast(`${pName} added to cart!`, true);
+        
+        if (btn) {
+            btn.classList.add('added');
+            btn.innerHTML = `<i class="fas fa-check"></i> Added`;
+        }
+    }
+    
+    if (window.updateCartBadge) window.updateCartBadge();
+    syncHardcodedButtons(); // Sync all other instances on the page
 }
 
-// =============================================
+function showToast(msg, isAdd = true) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `position:fixed;bottom:20px;right:20px;background:${isAdd ? '#2d5a27' : '#e11d48'};color:white;padding:1rem 2rem;border-radius:12px;z-index:10000;box-shadow:0 10px 30px rgba(0,0,0,0.2);animation:slideIn 0.3s ease-out;`;
+    toast.innerHTML = `<i class="fas ${isAdd ? 'fa-check-circle' : 'fa-info-circle'}"></i> ${msg}`;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 3000);
+}
+
+function buyNow(pName, pPrice, pImg) {
+    const numericPrice = parseInt(String(pPrice).replace(/[^0-9]/g, ''));
+    const product = {
+        name: pName,
+        price: numericPrice,
+        image: pImg
+    };
+    sessionStorage.setItem('um_cart', JSON.stringify([product]));
+    window.location.href = '../../templates/payment_gateway.html';
+}
+
 // Initialize
-// =============================================
 document.addEventListener('DOMContentLoaded', () => {
     renderHeroCarousel();
     renderFeaturedAuthors();
     renderDynamicGenres();
-    initGenreTabs();
-    initNewsletter();
+    syncHardcodedButtons();
+    syncLikes();
 });
+
+function syncLikes() {
+    const liked = JSON.parse(localStorage.getItem('books_liked') || '[]');
+    document.querySelectorAll('.like-btn').forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes('toggleLike')) {
+            const match = onclickAttr.match(/toggleLike\('([^']+)'/);
+            if (match && match[1]) {
+                const pName = match[1];
+                const isItemLiked = liked.includes(pName);
+                btn.classList.toggle('liked', isItemLiked);
+                const icon = btn.querySelector('i');
+                if (icon) {
+                    icon.classList.toggle('fas', isItemLiked);
+                    icon.classList.toggle('far', !isItemLiked);
+                }
+            }
+        }
+    });
+}
+
+function syncHardcodedButtons() {
+    const cart = JSON.parse(localStorage.getItem('pbssd_cart') || '[]');
+    // Target both standard and carousel-style cart buttons
+    document.querySelectorAll('.btn-add-cart, .add-to-cart').forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && (onclickAttr.includes('addToCart') || onclickAttr.includes('quickAdd'))) {
+            const match = onclickAttr.match(/(?:addToCart|quickAdd)\('([^']+)'/);
+            if (match && match[1]) {
+                const pName = match[1];
+                const inCart = cart.some(item => item.name === pName);
+                btn.classList.toggle('added', inCart);
+                
+                // Keep the icon and text consistent with the design
+                if (inCart) {
+                    btn.innerHTML = `<i class="fas fa-check"></i> Added`;
+                } else {
+                    const isCarousel = btn.classList.contains('add-to-cart');
+                    btn.innerHTML = isCarousel ? `<i class="fas fa-plus"></i> ADD` : `<i class="fas fa-shopping-cart"></i> Add`;
+                }
+            }
+        }
+    });
+}
