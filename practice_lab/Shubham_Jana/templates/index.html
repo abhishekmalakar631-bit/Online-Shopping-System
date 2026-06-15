@@ -160,12 +160,12 @@
                         class="bi bi-grid-fill"></i> For You</div>
 
                 <a style="text-decoration: none; color: inherit; "
-                        href="grocery.html"><div class="cat-pill" data-cat="Grocery" onclick="filterProducts('Grocery', this)"><i
+                        href="{{ url_for('grocery') }}"><div class="cat-pill" data-cat="Grocery" onclick="filterProducts('Grocery', this)"><i
                         class="bi bi-cart"></i> Grocery</div></a>
 
                 <a style="text-decoration: none; color: inherit; "
-                        href=" fashion.html"><div class="cat-pill" data-cat="Fashion" onclick="filterProducts('Fashion', this)"><i
-                        class="bi bi-bag-heart"></i> Fashio</div></a>
+                        href="{{ url_for('fashion') }}"><div class="cat-pill" data-cat="Fashion" onclick="filterProducts('Fashion', this)"><i
+                        class="bi bi-bag-heart"></i> Fashion</div></a>
 
                 <a style="text-decoration: none; color: inherit; "
                         href=" mobile.html"><div class="cat-pill" data-cat="Mobiles" onclick="filterProducts('Mobiles', this)"><i
@@ -258,7 +258,7 @@
                                 <div class="wn-card-overlay"><span class="wn-tag">Fashion Drop</span>
                                     <h3 class="wn-card-title">Summer Organic<br>Collection '25</h3>
                                     <p class="wn-card-desc">Handpicked sustainable wear — now live.</p><a
-                                        href=" fashion.html" class="wn-btn wn-btn-light">Shop Now <i
+                                        href="{{ url_for('fashion') }}" class="wn-btn wn-btn-light">Shop Now <i
                                             class="bi bi-arrow-right"></i></a>
                                 </div>
                             </div>
@@ -276,7 +276,7 @@
                                     <div class="wn-card-overlay"><span class="wn-tag"
                                             style="background:#D4AF37;color:#1A1A1A;">Grocery</span>
                                         <h4 class="wn-card-title-sm">Pure Farm Harvest</h4><a
-                                            href="grocery.html" class="wn-btn wn-btn-outline">Order
+                                            href="{{ url_for('grocery') }}" class="wn-btn wn-btn-outline">Order
                                             Fresh <i class="bi bi-arrow-right"></i></a>
                                     </div>
                                 </div>
@@ -401,7 +401,7 @@
                                     <div class="wn-card-overlay"><span class="wn-tag"
                                             style="background:#65a30d;">Food</span>
                                         <h4 class="wn-card-title-sm">Organic Honey Batch</h4><a
-                                            href="grocery.html" class="wn-btn wn-btn-outline">Order
+                                            href="{{ url_for('grocery') }}" class="wn-btn wn-btn-outline">Order
                                             Fresh
                                             <i class="bi bi-arrow-right"></i></a>
                                     </div>
@@ -410,7 +410,7 @@
                                     style="background-image:url('https://images.unsplash.com/photo-1551028711-031cde72b4d5?w=700')">
                                     <div class="wn-card-overlay"><span class="wn-tag">Fashion</span>
                                         <h4 class="wn-card-title-sm">Linen Essentials</h4><a
-                                            href=" fashion.html" class="wn-btn wn-btn-outline">Browse <i
+                                            href="{{ url_for('fashion') }}" class="wn-btn wn-btn-outline">Browse <i
                                                 class="bi bi-arrow-right"></i></a>
                                     </div>
                                 </div>
@@ -675,7 +675,7 @@
         // =====================================================================
         const CAT_PAGE_LINKS = {
             'Grocery': 'grocery.html',          // TODO: LINK → Grocery
-            'Fashion': ' fashion.html',          // TODO: LINK → Fashion
+            'Fashion': 'fashion.html',          // TODO: LINK → Fashion
             'Mobiles': '#',                                      // TODO: LINK → Mobiles
             'Beauty': ' beauty.html',           // TODO: LINK → Beauty
             'Electronics': '#',                                      // TODO: LINK → Electronics
