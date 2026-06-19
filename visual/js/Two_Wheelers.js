@@ -1,5 +1,5 @@
 // =============================================
-// 2_Wheelers.js — Fully Dynamic Landing Page
+// Two_Wheelers.js — Fully Dynamic Landing Page
 // =============================================
 
 // Hero Products will be derived from Master Database
@@ -46,7 +46,7 @@ function renderHeroCarousel() {
             };
         });
     } else {
-        console.warn("2_Wheelers_Data.js: allProducts not found or empty.");
+        console.warn("Two_Wheelers_Data.js: allProducts not found or empty.");
         return;
     }
 
@@ -74,7 +74,7 @@ function renderHeroCarousel() {
                         <img src="${product.img}" alt="${product.name}">
                         <h3>${product.name}</h3>
                         <p class="hero-price">${formattedPrice}</p>
-                        <button class="btn-light" onclick="window.location.href='2_Wheelers_ProductDetails.html?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(formattedPrice)}&img=${encodeURIComponent(product.img)}&cat=${encodeURIComponent(product.category)}&rating=${product.rating}&reviews=${product.reviews}${product.originalPrice ? '&originalPrice=₹' + product.originalPrice.toLocaleString('en-IN') : ''}&desc=${encodeURIComponent(product.desc)}&badge=${encodeURIComponent(product.badge || '')}'">VIEW PRODUCT</button>
+                        <button class="btn-light" onclick="window.location.href='Two_Wheelers_ProductDetails.html?name=${encodeURIComponent(product.name)}&price=${encodeURIComponent(formattedPrice)}&img=${encodeURIComponent(product.img)}&cat=${encodeURIComponent(product.category)}&rating=${product.rating}&reviews=${product.reviews}${product.originalPrice ? '&originalPrice=₹' + product.originalPrice.toLocaleString('en-IN') : ''}&desc=${encodeURIComponent(product.desc)}&badge=${encodeURIComponent(product.badge || '')}'">VIEW PRODUCT</button>
                     </div>
                 </div>
             </div>
@@ -227,7 +227,7 @@ function renderGenreTabs() {
     const coreTabs = [
         { id: 'hero', name: 'Featured', icon: 'fas fa-home' },
         { id: 'shop', name: 'All', icon: 'fas fa-th' },
-        { type: 'link', href: '2_Wheelers_AllProducts.html', name: 'Catalog', icon: 'fas fa-external-link-alt' }
+        { type: 'link', href: 'Two_Wheelers_AllProducts.html', name: 'Catalog', icon: 'fas fa-external-link-alt' }
     ];
 
     // Dynamic Category Tabs from DB
@@ -331,7 +331,7 @@ function renderProductCard(p) {
     const badgeClass = p.badgeClass || "badge-new";
 
     return `
-        <div class="product-card" data-aos="fade-up" onclick="window.location.href='2_Wheelers_ProductDetails.html?id=${p.id}&name=${encodeURIComponent(p.name)}&price=${encodeURIComponent(formattedPrice)}&img=${encodeURIComponent(p.img)}&cat=${encodeURIComponent(p.category)}&badge=${encodeURIComponent(badgeText)}&rating=${p.rating}&reviews=${p.reviews}${p.originalPrice ? '&originalPrice=' + encodeURIComponent('₹' + p.originalPrice.toLocaleString('en-IN')) : ''}&desc=${encodeURIComponent(p.desc)}'">
+        <div class="product-card" data-aos="fade-up" onclick="window.location.href='Two_Wheelers_ProductDetails.html?id=${p.id}&name=${encodeURIComponent(p.name)}&price=${encodeURIComponent(formattedPrice)}&img=${encodeURIComponent(p.img)}&cat=${encodeURIComponent(p.category)}&badge=${encodeURIComponent(badgeText)}&rating=${p.rating}&reviews=${p.reviews}${p.originalPrice ? '&originalPrice=' + encodeURIComponent('₹' + p.originalPrice.toLocaleString('en-IN')) : ''}&desc=${encodeURIComponent(p.desc)}'">
             <div class="image-wrapper">
                 <img src="${p.img}" class="product-image" alt="${p.name}">
                 <span class="product-badge ${badgeClass}">${badgeText}</span>
@@ -385,15 +385,15 @@ function renderSection(containerId, title, tagline, products, viewAllLink, bg = 
 function renderDynamicContent() {
     // 1. Top Deals (Products with originalPrice)
     const topDeals = allProducts.filter(p => p.originalPrice).slice(0, 4);
-    renderSection('top-deals-container', "Today's Top Deals", "LIMITED TIME OFFERS", topDeals, "2_Wheelers_AllProducts.html?filter=deals");
+    renderSection('top-deals-container', "Today's Top Deals", "LIMITED TIME OFFERS", topDeals, "Two_Wheelers_AllProducts.html?filter=deals");
 
     // 2. Best Sellers (High rating/reviews)
     const bestSellers = [...allProducts].sort((a, b) => b.reviews - a.reviews).slice(0, 4);
-    renderSection('best-sellers-container', "Best Sellers of the Week", "RIDER FAVORITES", bestSellers, "2_Wheelers_AllProducts.html?filter=featured", "var(--light-green)");
+    renderSection('best-sellers-container', "Best Sellers of the Week", "RIDER FAVORITES", bestSellers, "Two_Wheelers_AllProducts.html?filter=featured", "var(--light-green)");
 
     // 3. Signature Gallery (Featured motorcycles)
     const signatureBikes = allProducts.filter(p => p.category === "Motorcycles").slice(0, 4);
-    renderSection('signature-gallery-container', "Motorcycles", "PREMIUM COLLECTION", signatureBikes, "2_Wheelers_AllProducts.html?filter=motorcycle");
+    renderSection('signature-gallery-container', "Motorcycles", "PREMIUM COLLECTION", signatureBikes, "Two_Wheelers_AllProducts.html?filter=motorcycle");
     // Explicitly set ID for scrolling from nav
     const sigSection = document.getElementById('section-signature-gallery');
     if (sigSection) sigSection.id = 'sec-motorcycles';
@@ -469,7 +469,7 @@ function renderDynamicContent() {
                     <span class="section-tagline">EXPLORE ${cat.toUpperCase()}</span>
                     <h2>${cat}</h2>
                 </div>
-                <a href="2_Wheelers_AllProducts.html?filter=${encodeURIComponent(filterVal)}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+                <a href="Two_Wheelers_AllProducts.html?filter=${encodeURIComponent(filterVal)}" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
             </div>
             <div class="product-scroll-container">
                 ${catProducts.map(p => renderProductCard(p)).join('')}
@@ -483,7 +483,7 @@ function renderDynamicContent() {
     const finalSec = document.createElement('div');
     finalSec.id = 'sec-shop';
     container.appendChild(finalSec);
-    renderSection(finalSec.id, "Explore Our Full Collection", "ALL PRODUCTS", allMix, "2_Wheelers_AllProducts.html", 'var(--light-green)');
+    renderSection(finalSec.id, "Explore Our Full Collection", "ALL PRODUCTS", allMix, "Two_Wheelers_AllProducts.html", 'var(--light-green)');
 }
 
 function buyNow(pId, pName, pPrice, pImg) {

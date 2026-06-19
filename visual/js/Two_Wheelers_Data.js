@@ -1,7 +1,7 @@
 // =============================================
-// 2_Wheelers_Data.js — Master Product Database
-// Shared across 2_Wheelers.js, 2_Wheelers_AllProducts.js, 
-// and 2_Wheelers_ProductDetails.js
+// Two_Wheelers_Data.js — Master Product Database
+// Shared across Two_Wheelers.js, Two_Wheelers_AllProducts.js, 
+// and Two_Wheelers_ProductDetails.js
 // =============================================
 
 const allProducts = [
