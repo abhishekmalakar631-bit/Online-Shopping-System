@@ -12,6 +12,10 @@ from soumalyo_ghosh.models import User, Post
 from flask_login import login_user, current_user, logout_user, login_required
 
 
+@app.route('/')
+def home():
+    return render_template('index.html', posts=posts_data)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -31,6 +35,7 @@ def register():
 
 
 @app.route('/login', methods=['GET', 'POST'])
+@app.route('/login')
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
@@ -44,7 +49,8 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('home'))
         else:
             flash('login unsuccessful. please check email and password', 'danger')
-    return render_template('blog_login.html', form=form)
+    return render_template('login.html', form=form)
+
 
 @app.route("/logout")
 def logout():
