@@ -9,7 +9,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Lora:wght@500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='../static/css/login.css') }}" defer>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" defer>
 </head>
 <body>
     <div class="split-container">
@@ -97,7 +97,8 @@
                     <h2 class="heading-lora mb-2">Join Us</h2>
                     <p class="text-secondary mb-4">Start your journey with us</p>
                     
-                    <form id="userRegisterForm" action="/">
+                    <form id="userRegisterForm" action="/" method="POST" enctype="multipart/form-data">
+                        {{ register_form.hidden_tag() }}
                         <div class="text-center mb-3">
                             <img id="pfpPreview" class="preview-img" src="" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%; border: 2px solid #5A8A5A; margin-bottom: 10px; display: none;">
                             <label class="btn btn-outline-secondary btn-sm rounded-pill px-3">
@@ -231,7 +232,8 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <script src="static/js/register.js"></script>
+    <script src="static/js/login.js'"></script>
     <script>
         function toggleAuth(type) {
             document.getElementById('loginSection').style.display = type === 'login' ? 'block' : 'none';

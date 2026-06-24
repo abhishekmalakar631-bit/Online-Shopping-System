@@ -48,10 +48,10 @@ def login():
             flash('login unsuccessful. please check email and password', 'danger')
 
     if register_form.submit.data and register_form.validate_on_submit():
-        User = User(username = register_form.username.data, email = register_form.email.data, password = register_form.password.data, image_file = save_picture(register_form.user_image.data) if register_form.user_image.data else 'default.jpg')
+        new_user = User(username = register_form.username.data, email = register_form.email.data, password = register_form.password.data, image_file = save_picture(register_form.user_image.data) if register_form.user_image.data else 'default.jpg', phone = register_form.phone.data, location = register_form.location.data)
 
-        db.session.add(User)
-        db.commit()
+        db.session.add(new_user)
+        db.session.commit()
         flash(f'account created! you are able to log-in', 'success')
         return redirect(url_for('login'))
 
